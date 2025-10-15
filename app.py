@@ -197,7 +197,13 @@ def download_video(url: str, output_folder: str, audio_only: bool, quality: str,
             return True, "Download completed successfully!"
             
     except Exception as e:
-        return False, f"Error during download: {str(e)}"
+        error_msg = str(e)
+        
+        # Check for FFmpeg-related errors
+        if "ffmpeg" in error_msg.lower() or "merging of multiple formats" in error_msg.lower():
+            return False, f"FFmpeg Error: {error_msg}\n\n💡 Solution: Please install FFmpeg on your system.\nFor Windows: Download from https://ffmpeg.org/download.html and add to PATH."
+        else:
+            return False, f"Error during download: {error_msg}"
 
 def main():
     # Header
@@ -381,6 +387,12 @@ def main():
     - Twitter
     - Instagram
     - And many more!
+    
+    ## ⚠️ Requirements
+    
+    - **FFmpeg**: Required for video/audio merging
+    - **Windows**: Download from [ffmpeg.org](https://ffmpeg.org/download.html)
+    - **Add to PATH**: `C:\ffmpeg\bin` must be in your system PATH
     """)
     
     # Footer
